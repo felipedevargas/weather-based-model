@@ -4,7 +4,7 @@ library(tidyr)
 library(ggplot2)
 library(scales)
 
-teste = read_delim('LONDRINA_2004.csv',
+teste = read_delim('LONDRINA_2011.csv',
                    delim = ';',
                    col_types = cols(dd = col_date(format = "%Y-%m-%d"))) %>%
   mutate(chcp = cumsum(hcp)) %>%
@@ -31,14 +31,14 @@ varNames = c(
 )
 
 p<-ggplot(dGraph,
-       aes(x = dd, y = value, ymin = 0, ymax = value)) +
+          aes(x = dd, y = value, ymin = 0, ymax = value)) +
   facet_grid(variable~., scales = "free",
              as.table = FALSE,
              labeller = labeller( variable = varNames, .multi_line = TRUE )) +
   geom_step(data = teste %>%
               filter(variable %in% c( 'chcp'))) +
   geom_bar(data = teste %>%
-              filter(variable %in% c('chuva')),stat= "identity") +
+             filter(variable %in% c('chuva')),stat= "identity") +
   geom_line(data = teste %>%
               filter(variable %in% c('ur', 'temp', 'dif_adj_lag3'))) +
   theme_bw() + xlab("Date") + ylab("Values")+
@@ -48,7 +48,5 @@ p = if(nrow(annDate) > 0) {
   p + annotate("rect", xmin=annDate$dd, xmax = annDate$dd+1,
                ymin=-Inf, ymax=Inf, alpha=0.2, fill="red") 
 } 
-  
-p + ggsave(filename = "Figure3.png",width=8, height=10, dpi=600 )
 
-  
+p+ ggsave(filename = "Figure 3.png",width=8, height=10, dpi=600 )
